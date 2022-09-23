@@ -11,6 +11,7 @@
 		<title>Astro</title>
 	</head>
 	<body style="margin: 0; height: 100vh;">
+		
 		<div id='scene'>
 			<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 		viewBox="0 0 595.28 841.89" style="enable-background:new 0 0 595.28 841.89;" xml:space="preserve">
@@ -182,12 +183,15 @@
 	</g>
 			</svg>
 		</div> 
+		<div style="position: fixed; top: 0">
+			<button id="reset" style="padding: 30px;">Reset</button>
+		</div>
 		<script src="https://unpkg.com/@panzoom/panzoom@4.5.1/dist/panzoom.min.js" is:inline></script>
 		<script is:inline>
 			let detail = {x: 0, y:0, scale:1};
-			const elem = document.getElementById('scene')
+			const elem = document.getElementById('scene');
 			const panzoom = Panzoom(elem, {
-			maxScale: 5,
+			maxScale: 5
 			})
 			elem.parentElement.addEventListener('wheel', panzoom.zoomWithWheel)
 			elem.addEventListener('panzoomstart', (event) => {
@@ -203,7 +207,8 @@
 					}
 				}
 			})
-
+			const resetButton = document.getElementById('reset');
+			resetButton.addEventListener('click', panzoom.reset);
 		</script>
 	</body>
 </html>

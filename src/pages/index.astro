@@ -182,39 +182,28 @@
 	</g>
 			</svg>
 		</div> 
-		<script src="panzoom.js" is:inline></script>
+		<script src="https://unpkg.com/@panzoom/panzoom@4.5.1/dist/panzoom.min.js" is:inline></script>
 		<script is:inline>
-			let transform = false;
-			// just grab a DOM element
-			const element = document.querySelector('#scene');
-			var instance = panzoom(element);
+			let detail = {x: 0, y:0, scale:1};
+			const elem = document.getElementById('scene')
+			const panzoom = Panzoom(elem, {
+			maxScale: 5,
+			})
+			elem.parentElement.addEventListener('wheel', panzoom.zoomWithWheel)
+			elem.addEventListener('panzoomstart', (event) => {
+				detail = event.detail;
+			})
 
-			instance.on('panend', function(e) {
-				transform = true;
-				setTimeout(function() {
-					transform = false;
-				}, 100);
-			});
-			instance.on('transform', function(e) {
-				transform = true;
-				setTimeout(function() {
-					transform = false;
-				}, 100);
-			});
-
-			const paths = document.querySelectorAll("path.st0");
-			for (const path of paths) {
-				path.addEventListener('click', function(event) {
-					if (!transform) {
+			elem.addEventListener('panzoomend', (event) => {
+				const detailEnd = event.detail;
+				if (detail.x === detailEnd.x && detail.y === detailEnd.y && detail.scale === detailEnd.scale) {
+					const path = event.detail.originalEvent.path[0];
+					if (path.className.baseVal === "st0") {
 						path.style.fill = path.style.fill === "rgb(255, 0, 0)" ? "#FFFFFF" : "#FF0000";
 					}
-				})
-				path.addEventListener('touchend', function(event) {
-					if (!transform) {
-						path.style.fill = path.style.fill === "rgb(255, 0, 0)" ? "#FFFFFF" : "#FF0000";
-					}
-				})
-			}
+				}
+			})
+
 		</script>
 	</body>
 </html>

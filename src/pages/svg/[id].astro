@@ -3,11 +3,11 @@ import LayoutEditor from '../../layouts/LayoutEditor.astro';
 
 import Path from 'path';
 import Editor from '../../components/Editor.astro';
-export async function getStaticPaths() {
-    const svgs = await Astro.glob('/src/svg/*.svg');
-    return svgs.map((svg) => {
+export function getStaticPaths() {
+    const svgs = import.meta.glob('/src/svg/*.svg');
+    return Object.keys(svgs).map((svg) => {
         return {
-            params: { id: Path.parse(Path.parse(svg.default).name).name }
+            params: { id: Path.parse(svg).name }
         };
     });
 }

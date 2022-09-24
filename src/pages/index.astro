@@ -1,9 +1,25 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import fs from 'fs';
+import Path from 'path';
+import ImageThumbnail from 'image-thumbnail';
+import Dibujo from '../components/Dibujo.astro';
+const svgs = import.meta.glob('../svg/*.svg');
+let options = { width: 100, responseType: 'base64' }
+
+const keys = await Promise.all(
+	Object.keys(svgs).map(async (svg) => {
+		const {pathname: root} = new URL(svg, import.meta.url);
+		const imageBuffer = fs.readFileSync(root.substring(1));
+		const thumbnail =  await ImageThumbnail(imageBuffer, options);
+		return { name: Path.parse(svg).name, img: thumbnail };
+	})
+);
 
 ---
 
 <Layout title="Selecciona un dibujo para colorear">
-	<a href="svg/peppa">Peppa</a>
-	<a href="svg/peppa2">Peppa2</a>
+	{keys.map(({name, img}) => 
+		<Dibujo name={name} img={img} />
+	)}
 </Layout>

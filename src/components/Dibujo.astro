@@ -1,0 +1,25 @@
+---
+export interface Props {
+  name: string;
+  img: string;
+}
+
+const { name, img } = Astro.props as Props;
+---
+
+<a href={`svg/${name}`} class="dibujo">
+    <img src={`data:image/jpg;base64,${img}`} />
+</a>
+
+<style>
+    .dibujo {
+        text-decoration: none;
+        padding: 1em;
+        display: block;
+        width: 100px;
+        height: 141px;
+        box-sizing: content-box;
+        background-color: white;
+        border-radius: 1em;
+    }
+</style>

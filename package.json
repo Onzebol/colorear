@@ -12,6 +12,8 @@
   },
   "dependencies": {
     "astro": "^1.2.8",
+    "fs": "^0.0.1-security",
+    "image-thumbnail": "^1.0.15",
     "path": "^0.12.7"
   }
 }

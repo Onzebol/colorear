@@ -1,6 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import fs from 'fs';
+import fs from 'node:fs/promises';
 import Path from 'path';
 import ImageThumbnail from 'image-thumbnail';
 import Dibujo from '../components/Dibujo.astro';
@@ -9,8 +9,8 @@ let options = { width: 100, responseType: 'base64' }
 
 const keys = await Promise.all(
 	Object.keys(svgs).map(async (svg) => {
-		const {pathname: root} = new URL(svg, import.meta.url);
-		const imageBuffer = fs.readFileSync(root.substring(1));
+		const url = new URL(svg, import.meta.url);
+		const imageBuffer = await fs.readFile(url);
 		const thumbnail =  await ImageThumbnail(imageBuffer, options);
 		return { name: Path.parse(svg).name, img: thumbnail };
 	})

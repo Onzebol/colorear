@@ -2,7 +2,7 @@
 import LayoutEditor from '../../layouts/LayoutEditor.astro';
 
 import Path from 'path';
-import Editor from '../../../components/Editor.astro';
+import Editor from '../../components/Editor.astro';
 export async function getStaticPaths() {
     const svgs = await Astro.glob('/src/svg/*.svg');
     return svgs.map((svg) => {

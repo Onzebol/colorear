@@ -1,19 +1,18 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import fs from 'node:fs/promises';
-import Path from 'path';
+import fs from 'fs';
+import path from 'path';
 import ImageThumbnail from 'image-thumbnail';
 import Dibujo from '../components/Dibujo.astro';
-const svgs = Astro.glob('../svg/*.svg');
+const svgs = import.meta.env.DEV ? import.meta.glob('../svg/*.svg') : import.meta.glob('../src/svg/*.svg');
 let options = { width: 100, responseType: 'base64' }
 
 const keys = await Promise.all(
 	Object.keys(svgs).map(async (svg) => {
-		const url = new URL(svg, import.meta.url);
-		console.log(url);
-		const imageBuffer = await fs.readFile(url);
+		const url = new URL(svg, import.meta.url)
+		const imageBuffer = fs.readFileSync(url) ;
 		const thumbnail =  await ImageThumbnail(imageBuffer, options);
-		return { name: Path.parse(svg).name, img: thumbnail };
+		return { name: path.parse(svg).name, img: thumbnail };
 	})
 );
 

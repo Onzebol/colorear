@@ -4,12 +4,13 @@ import fs from 'node:fs/promises';
 import Path from 'path';
 import ImageThumbnail from 'image-thumbnail';
 import Dibujo from '../components/Dibujo.astro';
-const svgs = import.meta.glob('../svg/*.svg');
+const svgs = Astro.glob('../svg/*.svg');
 let options = { width: 100, responseType: 'base64' }
 
 const keys = await Promise.all(
 	Object.keys(svgs).map(async (svg) => {
 		const url = new URL(svg, import.meta.url);
+		console.log(url);
 		const imageBuffer = await fs.readFile(url);
 		const thumbnail =  await ImageThumbnail(imageBuffer, options);
 		return { name: Path.parse(svg).name, img: thumbnail };

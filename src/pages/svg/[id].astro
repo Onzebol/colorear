@@ -1,0 +1,18 @@
+---
+import LayoutEditor from '../../layouts/LayoutEditor.astro';
+
+import Path from 'path';
+import Editor from '../../../components/Editor.astro';
+export async function getStaticPaths() {
+    const svgs = await Astro.glob('/src/svg/*.svg');
+    return svgs.map((svg) => {
+        return {
+            params: { id: Path.parse(svg.default).name }
+        };
+    });
+}
+const { id } = Astro.params;
+---
+<LayoutEditor title={`Colorear ${ id }`}>
+    <Editor svg={ id } />
+</LayoutEditor>

@@ -1,0 +1,54 @@
+---
+export interface Props {
+	title: string;
+}
+const { title } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+	</head>
+	<body style="margin: 0; height: 100vh;">
+		<div id='scene' style="padding: 5vw;">
+			<slot />
+		</div>
+		<div style="position: fixed; top: 0">
+			<button id="reset" style="padding: 30px;">Reset</button>
+		</div>
+		<script src="https://unpkg.com/@panzoom/panzoom@4.5.1/dist/panzoom.min.js" is:inline></script>
+		<script is:inline>
+			let detail = {x: 0, y:0, scale:1};
+			const elem = document.getElementById('scene');
+			const panzoom = Panzoom(elem, {
+			maxScale: 5,
+			cursor: "default"
+			})
+			elem.parentElement.addEventListener('wheel', panzoom.zoomWithWheel)
+			elem.addEventListener('panzoomstart', (event) => {
+				detail = event.detail;
+			})
+
+			elem.addEventListener('panzoomend', (event) => {
+				const detailEnd = event.detail;
+				console.log(detailEnd);
+				if (detail.x === detailEnd.x && detail.y === detailEnd.y && detail.scale === detailEnd.scale) {
+					const path = event.detail.originalEvent.path[0];
+					if (path.className.baseVal === "st0") {
+						path.style.fill = path.style.fill === "rgb(255, 0, 0)" ? "#FFFFFF" : "#FF0000";
+					}
+				}
+			})
+			const resetButton = document.getElementById('reset');
+			resetButton.addEventListener('click', panzoom.reset);
+			window.addEventListener("orientationchange", (event) => {
+				panzoom.reset();
+			});
+		</script>
+	</body>
+</html>

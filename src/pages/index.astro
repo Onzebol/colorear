@@ -4,7 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import ImageThumbnail from 'image-thumbnail';
 import Dibujo from '../components/Dibujo.astro';
-const svgs = import.meta.env.DEV ? import.meta.glob('../svg/*.svg') : import.meta.glob('../src/svg/*.svg');
+const svgs = import.meta.env.DEV ? import.meta.glob('../svg/*.svg') : import.meta.glob('/src/svg/*.svg');
 let options = { width: 100, responseType: 'base64' }
 console.log('TEXTO');
 console.log(import.meta.url);

@@ -21,6 +21,9 @@ const colors = ["#B21F35", "#D82735", "#FF7435", "#FFA135", "#FFCB35", "#FFF735"
 			<slot />
 		</div>
 		<nav id="menu">
+			<a class="btn btn-icon" href="/colorear/">
+				<img src="/colorear/left.svg" />
+			</a>
 			<button id="reset" class="btn btn-icon">
 				<img src="/colorear/fit.svg" />
 			</button>
@@ -38,7 +41,7 @@ const colors = ["#B21F35", "#D82735", "#FF7435", "#FFA135", "#FFCB35", "#FFF735"
 				<button class="btn btnColor">
 					<div class="color" style={`background-color: ${color};`}></div>
 				</button>
-			))};
+			))}
 		</nav>
 		<nav id="menuTool">
 			<button id="reset" class="btn btn-icon">
@@ -177,7 +180,7 @@ const colors = ["#B21F35", "#D82735", "#FF7435", "#FFA135", "#FFCB35", "#FFF735"
 				display: none;
 				opacity: 0;
 				width: 90vw;
-				grid-template-columns: repeat(auto-fill, minmax(82px, 82px));
+				grid-template-columns: repeat(auto-fill, 65px);
 				height: calc(100vh - 130px);
 				background-color: rgba(255,255,255,0.5);
 				overflow: scroll;
@@ -185,13 +188,13 @@ const colors = ["#B21F35", "#D82735", "#FF7435", "#FFA135", "#FFCB35", "#FFF735"
 
 			.btn {
 				border: 0;
-				padding: 1rem;
+				padding: 0.7rem;
 				border-radius: 50%;
 				background-color: white;
 				box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
-				width: 50px;
-				height: 50px;
-				box-sizing: content-box;
+				width: 65px;
+				height: 65px;
+				box-sizing: border-box;
 			}
 
 			.color {

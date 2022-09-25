@@ -3,6 +3,7 @@ export interface Props {
 	title: string;
 }
 const { title } = Astro.props;
+const colors = ["#B21F35", "#D82735", "#FF7435", "#FFA135", "#FFCB35", "#FFF735", "#00753A", "#009E47", "#16DD36", "#0052A5", "#0079E7", "#06A9FC", "#681E7E", "#753CB5", "#BD7AF6", "#000000", "#595959", "#A9A9A9", "#DDDDDD", "#FFFFFF"]
 ---
 
 <!DOCTYPE html>
@@ -14,30 +15,38 @@ const { title } = Astro.props;
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
 	</head>
-	<body style="margin: 0; height: 100vh;">
+	<body style="margin: 0; height: 100vh; overflow: hidden; user-select: none; touch-action: none;">
 		<div id='scene'>
-			<slot class="scaled-content" />
+			<slot />
 		</div>
-		<div style="position: fixed; top: 0">
-			<button id="reset" style="padding: 30px;">Reset</button>
-			<button id="selectedColor" class="btn">
-				<div class="color" style="background-color: #FFFFFF;">
-					<img src="/colorear/crayon.svg" />
+		<nav id="menu">
+			<button id="reset" class="btn btn-icon">
+				<img src="/colorear/fit.svg" />
+			</button>
+			<button id="selectedTool" class="btn btn-icon">
+				<img src="/colorear/crayon.svg" />
+			</button>
+			<button id="selectedColor" class="btn ">
+				<div class="color btn-icon" style="background-color: #FFFFFF;">
+					<img src="/colorear/palette-color.svg" />
 				</div>
 			</button>
-			<div id="menuColor" style="display: none;">
+		</nav>
+		<nav id="menuColor">
+			{colors.map((color) => (
 				<button class="btn btnColor">
-					<div class="color" style="background-color: #FF0000;"></div>
+					<div class="color" style={`background-color: ${color};`}></div>
 				</button>
-				<button class="btn btnColor">
-					<div class="color" style="background-color: #00FF00;"></div>
-				</button>
-				<button class="btn btnColor">
-					<div class="color" style="background-color: #0000FF;"></div>
-				</button>
-			</div>
-			
-		</div>
+			))};
+		</nav>
+		<nav id="menuTool">
+			<button id="reset" class="btn btn-icon">
+				<img src="/colorear/crayon.svg" />
+			</button>
+			<button id="reset" class="btn btn-icon">
+				<img src="/colorear/color-dropper.svg" />
+			</button>
+		</nav>
 		<script src="/colorear/panzoom.js" is:inline></script>
 		<script is:inline>
 			Number.prototype.between = function(a, b) {
@@ -46,18 +55,63 @@ const { title } = Astro.props;
 				return this > min && this < max;
 			};
 			const maxMovement = 5;
+			
 			const selectedColor = document.querySelector('#selectedColor');
-
 			selectedColor.addEventListener('click', event => {
 				const menuColor = document.querySelector('#menuColor');
-				menuColor.style.display = menuColor.style.display === "block" ? "none" : "block";
+				if (menuColor.style.opacity === "1") {
+					menuColor.style.opacity = "0";
+					setTimeout(function(){
+						menuColor.style.display = "none";
+					}, 500);
+				} else {
+					menuColor.style.display = "grid";
+					setTimeout(function(){
+						menuColor.style.opacity = "1";
+					}, 100);
+					
+				}
 			});
-			const btns = document.querySelectorAll('.btnColor');
-			btns.forEach((btn) => {
+
+			const btnColors = document.querySelectorAll('#menuColor button');
+			btnColors.forEach((btn) => {
 				btn.addEventListener('click', event => {
 					selectedColor.style.backgroundColor = btn.children[0].style.backgroundColor;
 					const menuColor = document.querySelector('#menuColor');
-					menuColor.style.display = "none";
+					menuColor.style.opacity = "0";
+					setTimeout(function(){
+						menuColor.style.display = "none";
+					}, 500);
+				});
+			});
+
+			const selectedTool = document.querySelector('#selectedTool');
+			selectedTool.addEventListener('click', event => {
+				const menuTool = document.querySelector('#menuTool');
+				if (menuTool.style.opacity === "1") {
+					menuTool.style.opacity = "0";
+					setTimeout(function(){
+						menuTool.style.display = "none";
+					}, 500);
+				} else {
+					menuTool.style.display = "flex";
+					setTimeout(function(){
+						menuTool.style.opacity = "1";
+					}, 100);
+					
+				}
+			});
+
+			const btnTools = document.querySelectorAll('#menuTool button');
+			btnTools.forEach((btn) => {
+				btn.addEventListener('click', event => {
+					selectedTool.children[0].src = btn.children[0].src;
+
+					const menuTool = document.querySelector('#menuTool');
+					menuTool.style.opacity = "0";
+					setTimeout(function(){
+						menuTool.style.display = "none";
+					}, 500);
 				});
 			});
 
@@ -75,10 +129,8 @@ const { title } = Astro.props;
 
 			elem.addEventListener('panzoomend', (event) => {
 				const detailEnd = event.detail;
-				console.log(detailEnd);
 				if ((detail.x - detailEnd.x).between(-maxMovement, maxMovement) && (detail.y - detailEnd.y).between(-maxMovement, maxMovement) && detail.scale === detailEnd.scale) {
 					const path = event.detail.originalEvent.path[0];
-					console.log(selectedColor.style.backgroundColor);
 					if (path.className.baseVal === "st0") {
 						path.style.fill = selectedColor.style.backgroundColor;
 					}
@@ -86,70 +138,47 @@ const { title } = Astro.props;
 			})
 			const resetButton = document.querySelector('#reset');
 			resetButton.addEventListener('click', (event) => {
-				applyScaling();
+				panzoom.reset();
 			});
 			window.addEventListener("orientationchange", (event) => {
-				applyScaling();
+				panzoom.reset();
 			});
-
-			applyScaling();
-
-			function applyScaling() {
-				// Get the scaled content, and reset its scaling for an instant
-				const scaledWrapper = document.getElementsByTagName("body")[0];
-				const scaledContent = scaledWrapper.querySelector('div');
-				console.log(panzoom);
-
-				//scaledContent.style.transform = "scale(1) translate(0px, 0px)";
-
-				let { width: cw, height: ch } = scaledContent.getBoundingClientRect();
-				let { width: ww, height: wh } = scaledWrapper.getBoundingClientRect();
-				console.log(scaledWrapper.getBoundingClientRect());
-				console.log(scaledContent.getBoundingClientRect());
-				let scale = panzoom.getScale();
-				console.log(panzoom.getPan());
-
-				cw /= scale;
-				ch /= scale;
-				let panX = 0;
-				let panY = 0;
-				console.log(scale);
-
-				if (ww > wh)
-				{
-					// Pantalla horizontal
-					if (cw > ch)
-					{
-						// Imagen Horizontal
-						scale = ww / cw;
-					} else 
-					{
-						// Imagen Vertical
-						scale = wh / ch;
-						panY = -(ch - (ch * scale))/2;
-					}
-				} else {
-					// Pantalla vertical
-					if (cw > ch)
-					{
-						// Imagen Horizontal
-						scale = wh / ch;
-					} else 
-					{
-						// Imagen Vertical
-						scale = ww / cw;
-						panY = (wh - ch) / 2;
-					}
-				}
-				console.log(scale);
-				console.log(panY);
-				panzoom.zoom(scale);
-				panzoom.pan(panX, panY);
-				
-			};
 
 		</script>
 		<style>
+
+			nav#menu {
+				position: fixed;
+				top: 0;
+				display: flex;
+				gap: 1rem;
+				padding: 1rem;
+				transition: all 0.5s; 
+			}
+
+			nav#menuTool {
+				position: fixed;
+				top: 98px;
+				gap: 1rem;
+				padding: 1rem;
+				transition: all 0.5s;
+				display: none;
+				opacity: 0;
+				margin-left: 98px;
+			}
+
+			nav#menuColor {
+				position: fixed;
+				top: 98px;
+				gap: 1rem;
+				padding: 1rem;
+				transition: all 0.5s;
+				display: none;
+				opacity: 0;
+				width: 90vw;
+				grid-template-columns: repeat(auto-fill, minmax(82px, 82px));
+			}
+
 			.btn {
 				border: 0;
 				padding: 1rem;
@@ -159,24 +188,44 @@ const { title } = Astro.props;
 				width: 50px;
 				height: 50px;
 				box-sizing: content-box;
-				margin: 1rem 0.5rem;
 			}
 
 			.color {
 				width: 100%;
 				height: 100%;
 				border-radius: 50%;
-				border: 1px solid rgba(0, 0, 0, 0.5);
+				
 			}
 
-			#selectedColor div{
+			#scene{
+				height: 100%;
+				width: 100%;
+				padding: 3rem;
+				box-sizing: border-box;
+			}
+
+			.btn-icon {
 				display: flex;
 				align-items: center;
   				justify-content: center;
 			}
 
-			#selectedColor div img{
-				width: 60%;
+			#selectedColor img{
+				width: 80%;
+			}
+
+			#selectedTool img{
+				width: 80%;
+			}
+
+			#reset img{
+				width: 90%;
+			}
+		</style>
+		<style is:inline>
+			svg {
+				height: 100%;
+				width: 100%;
 			}
 		</style>
 	</body>

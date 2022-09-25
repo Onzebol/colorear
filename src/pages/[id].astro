@@ -1,0 +1,19 @@
+---
+import LayoutEditor from '../layouts/LayoutEditor.astro';
+
+import path from 'path';
+import Editor from '../components/Editor.astro';
+export function getStaticPaths() {
+    const svgs = import.meta.glob('/src/svg/*.svg');
+    return Object.keys(svgs).map((svg) => {
+        return {
+            params: { id: path.parse(svg).name }
+        };
+    });
+}
+const { id } = Astro.params;
+const name = id.replace("-", " ").replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase());
+---
+<LayoutEditor title={`Colorear ${ name }`}>
+    <Editor svg={ id } style=" height:100%; width:100%;" />
+</LayoutEditor>

@@ -8,7 +8,7 @@ const { name, img } = Astro.props as Props;
 const image = `url("data:image/jpg;base64,${img}")`;
 ---
 
-<a href={`svg/${name}`} class="dibujo"></a>
+<a href={`${name}`} class="dibujo"></a>
 
 <style define:vars={{ image }}>
     .dibujo {

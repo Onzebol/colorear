@@ -20,14 +20,52 @@ const { title } = Astro.props;
 		</div>
 		<div style="position: fixed; top: 0">
 			<button id="reset" style="padding: 30px;">Reset</button>
+			<button id="selectedColor" class="btn">
+				<div class="color" style="background-color: #FFFFFF;">
+					<img src="/public/crayon.svg" />
+				</div>
+			</button>
+			<div id="menuColor" style="display: none;">
+				<button class="btn btnColor">
+					<div class="color" style="background-color: #FF0000;"></div>
+				</button>
+				<button class="btn btnColor">
+					<div class="color" style="background-color: #00FF00;"></div>
+				</button>
+				<button class="btn btnColor">
+					<div class="color" style="background-color: #0000FF;"></div>
+				</button>
+			</div>
+			
 		</div>
 		<script src="https://unpkg.com/@panzoom/panzoom@4.5.1/dist/panzoom.min.js" is:inline></script>
 		<script is:inline>
+			Number.prototype.between = function(a, b) {
+				var min = Math.min.apply(Math, [a, b]),
+				max = Math.max.apply(Math, [a, b]);
+				return this > min && this < max;
+			};
+			const maxMovement = 5;
+			const selectedColor = document.querySelector('#selectedColor');
+
+			selectedColor.addEventListener('click', event => {
+				const menuColor = document.querySelector('#menuColor');
+				menuColor.style.display = menuColor.style.display === "block" ? "none" : "block";
+			});
+			const btns = document.querySelectorAll('.btnColor');
+			btns.forEach((btn) => {
+				btn.addEventListener('click', event => {
+					selectedColor.style.backgroundColor = btn.children[0].style.backgroundColor;
+					const menuColor = document.querySelector('#menuColor');
+					menuColor.style.display = "none";
+				});
+			});
+
 			let detail = {x: 0, y:0, scale:1};
-			const elem = document.getElementById('scene');
+			const elem = document.querySelector('#scene');
 			const panzoom = Panzoom(elem, {
-			maxScale: 5,
-			cursor: "default"
+				maxScale: 10,
+				cursor: "default"
 			})
 			elem.parentElement.addEventListener('wheel', panzoom.zoomWithWheel)
 			elem.addEventListener('panzoomstart', (event) => {
@@ -37,18 +75,49 @@ const { title } = Astro.props;
 			elem.addEventListener('panzoomend', (event) => {
 				const detailEnd = event.detail;
 				console.log(detailEnd);
-				if (detail.x === detailEnd.x && detail.y === detailEnd.y && detail.scale === detailEnd.scale) {
+				if ((detail.x - detailEnd.x).between(-maxMovement, maxMovement) && (detail.y - detailEnd.y).between(-maxMovement, maxMovement) && detail.scale === detailEnd.scale) {
 					const path = event.detail.originalEvent.path[0];
+					console.log(selectedColor.style.backgroundColor);
 					if (path.className.baseVal === "st0") {
-						path.style.fill = path.style.fill === "rgb(255, 0, 0)" ? "#FFFFFF" : "#FF0000";
+						path.style.fill = selectedColor.style.backgroundColor;
 					}
 				}
 			})
-			const resetButton = document.getElementById('reset');
+			const resetButton = document.querySelector('#reset');
 			resetButton.addEventListener('click', panzoom.reset);
 			window.addEventListener("orientationchange", (event) => {
 				panzoom.reset();
 			});
 		</script>
+		<style>
+			.btn {
+				border: 0;
+				padding: 1rem;
+				border-radius: 50%;
+				background-color: white;
+				box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
+				width: 50px;
+				height: 50px;
+				box-sizing: content-box;
+				margin: 1rem 0.5rem;
+			}
+
+			.color {
+				width: 100%;
+				height: 100%;
+				border-radius: 50%;
+				border: 1px solid rgba(0, 0, 0, 0.5);
+			}
+
+			#selectedColor div{
+				display: flex;
+				align-items: center;
+  				justify-content: center;
+			}
+
+			#selectedColor div img{
+				width: 60%;
+			}
+		</style>
 	</body>
 </html>

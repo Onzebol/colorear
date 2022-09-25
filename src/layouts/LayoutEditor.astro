@@ -16,7 +16,7 @@ const { title } = Astro.props;
 	</head>
 	<body style="margin: 0; height: 100vh;">
 		<div id='scene' style="padding: 5vw;">
-			<slot />
+			<slot class="scaled-content" />
 		</div>
 		<div style="position: fixed; top: 0">
 			<button id="reset" style="padding: 30px;">Reset</button>
@@ -84,10 +84,62 @@ const { title } = Astro.props;
 				}
 			})
 			const resetButton = document.querySelector('#reset');
-			resetButton.addEventListener('click', panzoom.reset);
-			window.addEventListener("orientationchange", (event) => {
-				panzoom.reset();
+			resetButton.addEventListener('click', (event) => {
+				applyScaling();
 			});
+			window.addEventListener("orientationchange", (event) => {
+				applyScaling();
+			});
+
+			applyScaling();
+
+
+			function applyScaling() {
+				// Get the scaled content, and reset its scaling for an instant
+				const scaledWrapper = document.getElementsByTagName("body")[0];
+				const scaledContent = scaledWrapper.querySelector('div');
+
+				scaledContent.style.transform = "scale(1) translate(0px, 0px)";
+
+				let { width: cw, height: ch } = scaledContent.getBoundingClientRect();
+				let { width: ww, height: wh } = scaledWrapper.getBoundingClientRect();
+				console.log(scaledWrapper.getBoundingClientRect());
+				console.log(scaledContent.getBoundingClientRect());
+				let scale = 1;
+				let panX = 0;
+				let panY = 0;
+
+				if (ww > wh)
+				{
+					// Pantalla horizontal
+					if (cw > ch)
+					{
+						// Imagen Horizontal
+						scale = ww / cw;
+					} else 
+					{
+						// Imagen Vertical
+						scale = wh / ch;
+						panY = -(ch - (ch * scale))/2;
+					}
+				} else {
+					// Pantalla vertical
+					if (cw > ch)
+					{
+						// Imagen Horizontal
+						scale = wh / ch;
+					} else 
+					{
+						// Imagen Vertical
+						scale = ww / cw;
+						panY = (wh - ch) / 2;
+					}
+				}
+				
+				panzoom.zoom(scale);
+				panzoom.pan(panX, panY);
+			};
+
 		</script>
 		<style>
 			.btn {

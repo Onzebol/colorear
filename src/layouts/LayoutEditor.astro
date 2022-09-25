@@ -10,6 +10,7 @@ const colors = ["#B21F35", "#D82735", "#FF7435", "#FFA135", "#FFCB35", "#FFF735"
 <html lang="es">
 	<head>
 		<meta charset="utf-8" />
+		<link rel="manifest" href="/colorear/js13kpwa.webmanifest" />
 		<link rel="icon" type="image/svg+xml" href="/colorear/favicon.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1" />
 		<meta name="generator" content={Astro.generator} />
@@ -177,6 +178,9 @@ const colors = ["#B21F35", "#D82735", "#FF7435", "#FFA135", "#FFCB35", "#FFF735"
 				opacity: 0;
 				width: 90vw;
 				grid-template-columns: repeat(auto-fill, minmax(82px, 82px));
+				height: calc(100vh - 130px);
+				background-color: rgba(255,255,255,0.5);
+				overflow: scroll;
 			}
 
 			.btn {

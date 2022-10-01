@@ -73,34 +73,44 @@ const colors = [
     function toggleMenu(name) {
         const menus = document.querySelectorAll('.menu');
         menus.forEach((menu) => {
-            if (menu.id === name) {
-                if (menu.style.opacity === "1") {
-                    menu.style.opacity = "0";
-                    fondo.style.opacity = "0";
-                    setTimeout(function(){
-                        menu.style.display = "none";
-                        fondo.style.display = "none";
-                    }, 500);
+            if (name) {
+                if (menu.id === name) {
+                    if (menu.style.opacity === "1") {
+                        menu.style.opacity = "0";
+                        fondo.style.opacity = "0";
+                        setTimeout(function(){
+                            menu.style.display = "none";
+                            fondo.style.display = "none";
+                        }, 500);
+                    } else {
+                        menu.style.display = "grid";
+                        fondo.style.display = "block";
+                        setTimeout(function(){
+                            menu.style.opacity = "1";
+                            fondo.style.opacity = "1";
+                        }, 100);
+                    }
                 } else {
-                    menu.style.display = "grid";
-                    fondo.style.display = "block";
-                    setTimeout(function(){
-                        menu.style.opacity = "1";
-                        fondo.style.opacity = "1";
-                    }, 100);
+                    if (menu.style.opacity === "1") {
+                        menu.style.opacity = "0";
+                        setTimeout(function(){
+                            menu.style.display = "none";
+                        }, 500);
+                    }
                 }
             } else {
-                if (menu.style.opacity === "1") {
-                    menu.style.opacity = "0";
-                    setTimeout(function(){
-                        menu.style.display = "none";
-                    }, 500);
-                }
+                menus.forEach(menu => menu.style.opacity = "0");
+                fondo.style.opacity = "0";
+                setTimeout(function(){
+                    menus.forEach(menu => menu.style.display = "none");
+                    fondo.style.display = "none";
+                }, 500);
             }
+            
         });
     }
 
-    const buttonsMenu = document.querySelectorAll('#menu button[data-menu]');
+    const buttonsMenu = document.querySelectorAll('#menu button');
     buttonsMenu.forEach((btn) => {
         btn.addEventListener('click', event => {
             toggleMenu(btn.dataset.menu);

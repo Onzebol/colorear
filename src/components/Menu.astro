@@ -1,0 +1,214 @@
+---
+// const colors = ["#B21F35", "#D82735", "#FF7435", "#FFA135", "#FFCB35", "#FFF735", "#00753A", "#009E47", "#16DD36", "#0052A5", "#0079E7", "#06A9FC", "#681E7E", "#753CB5", "#BD7AF6", "#000000", "#595959", "#A9A9A9", "#DDDDDD", "#FFFFFF"]
+const colors = [
+    "#000000", "#323132", "#b1b1b1", "#FFFFFF", // 1
+    "#150b00", "#6b5a46", "#998f82", "#cec9c2", // 2
+    "#200000", "#794215", "#a47f60", "#d2c0b0", // 3
+    "#3c1400", "#965f24", "#ba946b", "#ddc9b5", // 4
+    "#004b00", "#07a622", "#58c36a", "#afe1b5", // 5
+    "#002c00", "#008435", "#46ab79", "#a4d5bb", // 6
+    "#001c00", "#007036", "#4b9f77", "#a4cebb", // 7
+    "#003e36", "#00978f", "#4bb9b4", "#a4dcd8", // 8
+    "#004172", "#0093d4", "#4eb7e2", "#a5dbef", // 9
+    "#001550", "#005dac", "#4e93c7", "#a5c9e3", // 10
+    "#00003c", "#011680", "#5562a9", "#a8b0d2", // 11
+    "#000022", "#060450", "#57578a", "#abaac4", // 12
+    "#0e003e", "#480881", "#8558ab", "#c2aad5", // 13
+    "#280026", "#82017e", "#a955a9", "#d4aad3", // 14
+    "#320004", "#8d0048", "#b25185", "#d8a6c1", // 15
+    "#6b0002", "#cb0041", "#dd5180", "#eea7be", // 16
+    "#7f0029", "#e11c77", "#eb68a2", "#f5b2cf", // 17
+    "#4f0000", "#ab000b", "#c94f5c", "#e5a7ac", // 18
+    "#7f0000", "#e00c00", "#ea5b55", "#f5afa8", // 19
+    "#820000", "#e53600", "#ed7950", "#f5baa8", // 20
+    "#8a3500", "#ea7d00", "#efa74f", "#f7d3a7", // 21
+    "#8d4300", "#ee9104", "#f2b757", "#f8daa9", // 22
+    "#8c8200", "#ebdd00", "#ebe14f", "#f9f4a8", // 23
+    "#687300", "#c7d000", "#dae14f", "#edeea7", // 24
+];
+---
+
+<nav id="menu">
+    <a class="btn btn-icon" href="/colorear/">
+        <img src="/colorear/left.svg" />
+    </a>
+    <button id="reset" class="btn btn-icon">
+        <img src="/colorear/fit.svg" />
+    </button>
+    <button id="selectedTool" class="btn btn-icon">
+        <img src="/colorear/crayon.svg" />
+    </button>
+    <button id="selectedColor" class="btn ">
+        <div class="color btn-icon" style="background-color: #FFFFFF;">
+            <img src="/colorear/palette-color.svg" />
+        </div>
+    </button>
+</nav>
+<nav id="menuColor">
+    {colors.map((color) => (
+        <button class="btn btnColor">
+            <div class="color" style={`background-color: ${color};`}></div>
+        </button>
+    ))}
+</nav>
+<nav id="menuTool">
+    <button id="reset" class="btn btn-icon">
+        <img src="/colorear/crayon.svg" />
+    </button>
+    <button id="reset" class="btn btn-icon">
+        <img src="/colorear/color-dropper.svg" />
+    </button>
+</nav>
+
+<script is:inline>
+    
+    const selectedColor = document.querySelector('#selectedColor');
+    selectedColor.addEventListener('click', event => {
+        const menuColor = document.querySelector('#menuColor');
+        if (menuColor.style.opacity === "1") {
+            menuColor.style.opacity = "0";
+            setTimeout(function(){
+                menuColor.style.display = "none";
+            }, 500);
+        } else {
+            menuColor.style.display = "grid";
+            setTimeout(function(){
+                menuColor.style.opacity = "1";
+            }, 100);
+            
+        }
+    });
+
+    const btnColors = document.querySelectorAll('#menuColor button');
+    btnColors.forEach((btn) => {
+        btn.addEventListener('click', event => {
+            selectedColor.style.backgroundColor = btn.children[0].style.backgroundColor;
+            const menuColor = document.querySelector('#menuColor');
+            menuColor.style.opacity = "0";
+            setTimeout(function(){
+                menuColor.style.display = "none";
+            }, 500);
+        });
+    });
+
+    const selectedTool = document.querySelector('#selectedTool');
+    selectedTool.addEventListener('click', event => {
+        const menuTool = document.querySelector('#menuTool');
+        if (menuTool.style.opacity === "1") {
+            menuTool.style.opacity = "0";
+            setTimeout(function(){
+                menuTool.style.display = "none";
+            }, 500);
+        } else {
+            menuTool.style.display = "flex";
+            setTimeout(function(){
+                menuTool.style.opacity = "1";
+            }, 100);
+            
+        }
+    });
+
+    const btnTools = document.querySelectorAll('#menuTool button');
+    btnTools.forEach((btn) => {
+        btn.addEventListener('click', event => {
+            selectedTool.children[0].src = btn.children[0].src;
+
+            const menuTool = document.querySelector('#menuTool');
+            menuTool.style.opacity = "0";
+            setTimeout(function(){
+                menuTool.style.display = "none";
+            }, 500);
+        });
+    });
+
+    const resetButton = document.querySelector('#reset');
+    resetButton.addEventListener('click', (event) => {
+        panzoom.reset();
+    });
+
+</script>
+
+<style>
+    :root {
+        --button-size: 65px;
+        --button-gap: 16px;
+    }
+
+    nav#menu {
+        position: fixed;
+        top: 0;
+        display: flex;
+        gap: var(--button-gap);
+        padding: var(--button-gap);
+        transition: all 0.5s; 
+    }
+
+    nav#menuTool {
+        position: fixed;
+        top: calc(var(--button-gap) + var(--button-size));
+        gap: var(--button-gap);
+        padding: var(--button-gap);
+        transition: all 0.5s;
+        display: none;
+        opacity: 0;
+        margin-left: calc(var(--button-gap) + var(--button-size));
+    }
+
+    nav#menuColor {
+        position: fixed;
+        top: calc(var(--button-gap) + var(--button-size));
+        gap: var(--button-gap);
+        padding: var(--button-gap);
+        transition: all 0.5s;
+        display: none;
+        opacity: 0;
+        width: 90vw;
+        grid-template-columns: repeat(auto-fill, var(--button-size));
+        max-height: calc(100vh - 130px);
+        background-color: rgba(255,255,255,0.5);
+        overflow: scroll;
+    }
+
+    .btn {
+        border: 0;
+        padding: 0.7rem;
+        border-radius: 50%;
+        background-color: white;
+        box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
+        width: var(--button-size);
+        height: var(--button-size);
+        box-sizing: border-box;
+    }
+
+    .color {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        
+    }
+
+    #scene{
+        height: 100%;
+        width: 100%;
+        padding: 3rem;
+        box-sizing: border-box;
+    }
+
+    .btn-icon {
+        display: flex;
+        align-items: center;
+          justify-content: center;
+    }
+
+    #selectedColor img{
+        width: 80%;
+    }
+
+    #selectedTool img{
+        width: 80%;
+    }
+
+    #reset img{
+        width: 90%;
+    }
+</style>

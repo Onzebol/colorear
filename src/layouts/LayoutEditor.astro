@@ -48,7 +48,12 @@ const { title } = Astro.props;
 				if ((detail.x - detailEnd.x).between(-maxMovement, maxMovement) && (detail.y - detailEnd.y).between(-maxMovement, maxMovement) && detail.scale === detailEnd.scale) {
 					const path = event.detail.originalEvent.path[0];
 					if (path.className.baseVal === "st0") {
-						path.style.fill = selectedColor.style.backgroundColor;
+						console.log(selectedTool.children[0].src);
+						if (selectedTool.children[0].src.includes("crayon")) {
+							path.style.fill = selectedColor.style.backgroundColor;
+						} else if (selectedTool.children[0].src.includes("color-dropper")) {
+							selectedColor.style.backgroundColor = path.style.fill;
+						}
 					}
 				}
 			})

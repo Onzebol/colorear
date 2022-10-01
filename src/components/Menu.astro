@@ -64,7 +64,6 @@ const colors = [
 </nav>
 
 <script is:inline>
-    const fondo = document.querySelector('#fondo');
 
     fondo.addEventListener('wheel', function(e) {
         e.preventDefault();
@@ -106,7 +105,6 @@ const colors = [
                     fondo.style.display = "none";
                 }, 500);
             }
-            
         });
     }
 
@@ -144,6 +142,7 @@ const colors = [
     :root {
         --button-size: 65px;
         --button-gap: 16px;
+        --speed-menu: 0.3s
     }
 
     #fondo {
@@ -156,7 +155,7 @@ const colors = [
         backdrop-filter: blur(5px);
         display: none;
         opacity: 0;
-        transition: all 0.5s;
+        transition: all var(--speed-menu);
     }
 
     nav#menu {
@@ -165,7 +164,6 @@ const colors = [
         top: 0;
         gap: var(--button-gap);
         padding: var(--button-gap);
-        transition: all 0.5s; 
     }
 
     .menu {
@@ -174,7 +172,7 @@ const colors = [
         gap: var(--button-gap);
         padding: var(--button-gap);
         padding-top: calc(var(--button-gap) * 2 + var(--button-size));
-        transition: all 0.5s;
+        transition: all var(--speed-menu);
         display: none;
         opacity: 0;
         width: 100%;
@@ -199,14 +197,6 @@ const colors = [
         width: 100%;
         height: 100%;
         border-radius: 50%;
-        
-    }
-
-    #scene{
-        height: 100%;
-        width: 100%;
-        padding: 3rem;
-        box-sizing: border-box;
     }
 
     .btn-icon {
@@ -215,11 +205,7 @@ const colors = [
         justify-content: center;
     }
 
-    #selectedColor img{
-        width: 80%;
-    }
-
-    #selectedTool img{
+    .btn-icon img{
         width: 80%;
     }
 

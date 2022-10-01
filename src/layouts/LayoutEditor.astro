@@ -1,9 +1,10 @@
 ---
+import Menu from '../components/Menu.astro';
+
 export interface Props {
 	title: string;
 }
 const { title } = Astro.props;
-const colors = ["#B21F35", "#D82735", "#FF7435", "#FFA135", "#FFCB35", "#FFF735", "#00753A", "#009E47", "#16DD36", "#0052A5", "#0079E7", "#06A9FC", "#681E7E", "#753CB5", "#BD7AF6", "#000000", "#595959", "#A9A9A9", "#DDDDDD", "#FFFFFF"]
 ---
 
 <!DOCTYPE html>
@@ -20,37 +21,7 @@ const colors = ["#B21F35", "#D82735", "#FF7435", "#FFA135", "#FFCB35", "#FFF735"
 		<div id='scene'>
 			<slot />
 		</div>
-		<nav id="menu">
-			<a class="btn btn-icon" href="/colorear/">
-				<img src="/colorear/left.svg" />
-			</a>
-			<button id="reset" class="btn btn-icon">
-				<img src="/colorear/fit.svg" />
-			</button>
-			<button id="selectedTool" class="btn btn-icon">
-				<img src="/colorear/crayon.svg" />
-			</button>
-			<button id="selectedColor" class="btn ">
-				<div class="color btn-icon" style="background-color: #FFFFFF;">
-					<img src="/colorear/palette-color.svg" />
-				</div>
-			</button>
-		</nav>
-		<nav id="menuColor">
-			{colors.map((color) => (
-				<button class="btn btnColor">
-					<div class="color" style={`background-color: ${color};`}></div>
-				</button>
-			))}
-		</nav>
-		<nav id="menuTool">
-			<button id="reset" class="btn btn-icon">
-				<img src="/colorear/crayon.svg" />
-			</button>
-			<button id="reset" class="btn btn-icon">
-				<img src="/colorear/color-dropper.svg" />
-			</button>
-		</nav>
+		<Menu />
 		<script src="/colorear/panzoom.js" is:inline></script>
 		<script is:inline>
 			Number.prototype.between = function(a, b) {
@@ -60,65 +31,6 @@ const colors = ["#B21F35", "#D82735", "#FF7435", "#FFA135", "#FFCB35", "#FFF735"
 			};
 			const maxMovement = 5;
 			
-			const selectedColor = document.querySelector('#selectedColor');
-			selectedColor.addEventListener('click', event => {
-				const menuColor = document.querySelector('#menuColor');
-				if (menuColor.style.opacity === "1") {
-					menuColor.style.opacity = "0";
-					setTimeout(function(){
-						menuColor.style.display = "none";
-					}, 500);
-				} else {
-					menuColor.style.display = "grid";
-					setTimeout(function(){
-						menuColor.style.opacity = "1";
-					}, 100);
-					
-				}
-			});
-
-			const btnColors = document.querySelectorAll('#menuColor button');
-			btnColors.forEach((btn) => {
-				btn.addEventListener('click', event => {
-					selectedColor.style.backgroundColor = btn.children[0].style.backgroundColor;
-					const menuColor = document.querySelector('#menuColor');
-					menuColor.style.opacity = "0";
-					setTimeout(function(){
-						menuColor.style.display = "none";
-					}, 500);
-				});
-			});
-
-			const selectedTool = document.querySelector('#selectedTool');
-			selectedTool.addEventListener('click', event => {
-				const menuTool = document.querySelector('#menuTool');
-				if (menuTool.style.opacity === "1") {
-					menuTool.style.opacity = "0";
-					setTimeout(function(){
-						menuTool.style.display = "none";
-					}, 500);
-				} else {
-					menuTool.style.display = "flex";
-					setTimeout(function(){
-						menuTool.style.opacity = "1";
-					}, 100);
-					
-				}
-			});
-
-			const btnTools = document.querySelectorAll('#menuTool button');
-			btnTools.forEach((btn) => {
-				btn.addEventListener('click', event => {
-					selectedTool.children[0].src = btn.children[0].src;
-
-					const menuTool = document.querySelector('#menuTool');
-					menuTool.style.opacity = "0";
-					setTimeout(function(){
-						menuTool.style.display = "none";
-					}, 500);
-				});
-			});
-
 			let detail = {x: 0, y:0, scale:1};
 			const elem = document.querySelector('#scene');
 			const panzoom = Panzoom(elem, {
@@ -126,7 +38,7 @@ const colors = ["#B21F35", "#D82735", "#FF7435", "#FFA135", "#FFCB35", "#FFF735"
 				cursor: "default",
 				animate: true
 			})
-			elem.parentElement.addEventListener('wheel', panzoom.zoomWithWheel)
+			elem.addEventListener('wheel', panzoom.zoomWithWheel)
 			elem.addEventListener('panzoomstart', (event) => {
 				detail = event.detail;
 			})
@@ -136,97 +48,27 @@ const colors = ["#B21F35", "#D82735", "#FF7435", "#FFA135", "#FFCB35", "#FFF735"
 				if ((detail.x - detailEnd.x).between(-maxMovement, maxMovement) && (detail.y - detailEnd.y).between(-maxMovement, maxMovement) && detail.scale === detailEnd.scale) {
 					const path = event.detail.originalEvent.path[0];
 					if (path.className.baseVal === "st0") {
-						path.style.fill = selectedColor.style.backgroundColor;
+						console.log(selectedTool.children[0].src);
+						if (selectedTool.children[0].src.includes("crayon")) {
+							path.style.fill = selectedColor.style.backgroundColor;
+						} else if (selectedTool.children[0].src.includes("color-dropper")) {
+							selectedColor.style.backgroundColor = path.style.fill;
+						}
 					}
 				}
 			})
-			const resetButton = document.querySelector('#reset');
-			resetButton.addEventListener('click', (event) => {
-				panzoom.reset();
-			});
+			
 			window.addEventListener("orientationchange", (event) => {
 				panzoom.reset();
 			});
 
 		</script>
 		<style>
-
-			nav#menu {
-				position: fixed;
-				top: 0;
-				display: flex;
-				gap: 1rem;
-				padding: 1rem;
-				transition: all 0.5s; 
-			}
-
-			nav#menuTool {
-				position: fixed;
-				top: 98px;
-				gap: 1rem;
-				padding: 1rem;
-				transition: all 0.5s;
-				display: none;
-				opacity: 0;
-				margin-left: 98px;
-			}
-
-			nav#menuColor {
-				position: fixed;
-				top: 98px;
-				gap: 1rem;
-				padding: 1rem;
-				transition: all 0.5s;
-				display: none;
-				opacity: 0;
-				width: 90vw;
-				grid-template-columns: repeat(auto-fill, 65px);
-				height: calc(100vh - 130px);
-				background-color: rgba(255,255,255,0.5);
-				overflow: scroll;
-			}
-
-			.btn {
-				border: 0;
-				padding: 0.7rem;
-				border-radius: 50%;
-				background-color: white;
-				box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
-				width: 65px;
-				height: 65px;
-				box-sizing: border-box;
-			}
-
-			.color {
-				width: 100%;
-				height: 100%;
-				border-radius: 50%;
-				
-			}
-
 			#scene{
 				height: 100%;
 				width: 100%;
 				padding: 3rem;
 				box-sizing: border-box;
-			}
-
-			.btn-icon {
-				display: flex;
-				align-items: center;
-  				justify-content: center;
-			}
-
-			#selectedColor img{
-				width: 80%;
-			}
-
-			#selectedTool img{
-				width: 80%;
-			}
-
-			#reset img{
-				width: 90%;
 			}
 		</style>
 		<style is:inline>

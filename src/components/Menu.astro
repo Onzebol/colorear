@@ -38,10 +38,10 @@ const colors = [
 </nav>
 
 <nav id="menuTool" class="menu">
-    <button id="reset" class="btn btn-icon">
+    <button class="btn btn-icon">
         <img src="/colorear/crayon.svg" />
     </button>
-    <button id="reset" class="btn btn-icon">
+    <button class="btn btn-icon">
         <img src="/colorear/color-dropper.svg" />
     </button>
 </nav>
@@ -73,7 +73,6 @@ const colors = [
     function toggleMenu(name) {
         const menus = document.querySelectorAll('.menu');
         menus.forEach((menu) => {
-            console.log(menu.id);
             if (menu.id === name) {
                 if (menu.style.opacity === "1") {
                     menu.style.opacity = "0";

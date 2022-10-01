@@ -27,31 +27,17 @@ const colors = [
     "#687300", "#c7d000", "#dae14f", "#edeea7", // 24
 ];
 ---
+<div id="fondo"></div>
 
-<nav id="menu">
-    <a class="btn btn-icon" href="/colorear/">
-        <img src="/colorear/left.svg" />
-    </a>
-    <button id="reset" class="btn btn-icon">
-        <img src="/colorear/fit.svg" />
-    </button>
-    <button id="selectedTool" class="btn btn-icon">
-        <img src="/colorear/crayon.svg" />
-    </button>
-    <button id="selectedColor" class="btn ">
-        <div class="color btn-icon" style="background-color: #FFFFFF;">
-            <img src="/colorear/palette-color.svg" />
-        </div>
-    </button>
-</nav>
-<nav id="menuColor">
-    {colors.map((color) => (
+<nav id="menuColor" class="menu">
+    {colors.map((color, index) => (
         <button class="btn btnColor">
             <div class="color" style={`background-color: ${color};`}></div>
         </button>
     ))}
 </nav>
-<nav id="menuTool">
+
+<nav id="menuTool" class="menu">
     <button id="reset" class="btn btn-icon">
         <img src="/colorear/crayon.svg" />
     </button>
@@ -60,64 +46,81 @@ const colors = [
     </button>
 </nav>
 
+<nav id="menu">
+    <a class="btn btn-icon" href="/colorear/">
+        <img src="/colorear/left.svg" />
+    </a>
+    <button id="reset" class="btn btn-icon">
+        <img src="/colorear/fit.svg" />
+    </button>
+    <button id="selectedTool" data-menu="menuTool" class="btn btn-icon">
+        <img src="/colorear/crayon.svg" />
+    </button>
+    <button id="selectedColor" data-menu="menuColor" class="btn ">
+        <div class="color btn-icon" style="background-color: #FFFFFF;">
+            <img src="/colorear/palette-color.svg" />
+        </div>
+    </button>
+</nav>
+
 <script is:inline>
-    
-    const selectedColor = document.querySelector('#selectedColor');
-    selectedColor.addEventListener('click', event => {
-        const menuColor = document.querySelector('#menuColor');
-        if (menuColor.style.opacity === "1") {
-            menuColor.style.opacity = "0";
-            setTimeout(function(){
-                menuColor.style.display = "none";
-            }, 500);
-        } else {
-            menuColor.style.display = "grid";
-            setTimeout(function(){
-                menuColor.style.opacity = "1";
-            }, 100);
-            
-        }
+    const fondo = document.querySelector('#fondo');
+
+    fondo.addEventListener('wheel', function(e) {
+        e.preventDefault();
+    });
+
+    function toggleMenu(name) {
+        const menus = document.querySelectorAll('.menu');
+        menus.forEach((menu) => {
+            console.log(menu.id);
+            if (menu.id === name) {
+                if (menu.style.opacity === "1") {
+                    menu.style.opacity = "0";
+                    fondo.style.opacity = "0";
+                    setTimeout(function(){
+                        menu.style.display = "none";
+                        fondo.style.display = "none";
+                    }, 500);
+                } else {
+                    menu.style.display = "grid";
+                    fondo.style.display = "block";
+                    setTimeout(function(){
+                        menu.style.opacity = "1";
+                        fondo.style.opacity = "1";
+                    }, 100);
+                }
+            } else {
+                if (menu.style.opacity === "1") {
+                    menu.style.opacity = "0";
+                    setTimeout(function(){
+                        menu.style.display = "none";
+                    }, 500);
+                }
+            }
+        });
+    }
+
+    const buttonsMenu = document.querySelectorAll('#menu button[data-menu]');
+    buttonsMenu.forEach((btn) => {
+        btn.addEventListener('click', event => {
+            toggleMenu(btn.dataset.menu);
+        });
     });
 
     const btnColors = document.querySelectorAll('#menuColor button');
     btnColors.forEach((btn) => {
         btn.addEventListener('click', event => {
             selectedColor.style.backgroundColor = btn.children[0].style.backgroundColor;
-            const menuColor = document.querySelector('#menuColor');
-            menuColor.style.opacity = "0";
-            setTimeout(function(){
-                menuColor.style.display = "none";
-            }, 500);
+            toggleMenu(btn.parentElement.id)
         });
-    });
-
-    const selectedTool = document.querySelector('#selectedTool');
-    selectedTool.addEventListener('click', event => {
-        const menuTool = document.querySelector('#menuTool');
-        if (menuTool.style.opacity === "1") {
-            menuTool.style.opacity = "0";
-            setTimeout(function(){
-                menuTool.style.display = "none";
-            }, 500);
-        } else {
-            menuTool.style.display = "flex";
-            setTimeout(function(){
-                menuTool.style.opacity = "1";
-            }, 100);
-            
-        }
     });
 
     const btnTools = document.querySelectorAll('#menuTool button');
     btnTools.forEach((btn) => {
         btn.addEventListener('click', event => {
             selectedTool.children[0].src = btn.children[0].src;
-
-            const menuTool = document.querySelector('#menuTool');
-            menuTool.style.opacity = "0";
-            setTimeout(function(){
-                menuTool.style.display = "none";
-            }, 500);
+            toggleMenu(btn.parentElement.id)
         });
     });
 
@@ -134,38 +137,41 @@ const colors = [
         --button-gap: 16px;
     }
 
+    #fondo {
+        background-color: rgba(255,255,255,0.2);
+        height: 100vh;
+        width: 100vw;
+        position: absolute;
+        top: 0;
+        left: 0;
+        backdrop-filter: blur(5px);
+        display: none;
+        opacity: 0;
+        transition: all 0.5s;
+    }
+
     nav#menu {
+        display: flex;
         position: fixed;
         top: 0;
-        display: flex;
         gap: var(--button-gap);
         padding: var(--button-gap);
         transition: all 0.5s; 
     }
 
-    nav#menuTool {
+    .menu {
         position: fixed;
-        top: calc(var(--button-gap) + var(--button-size));
+        top: 0;
         gap: var(--button-gap);
         padding: var(--button-gap);
+        padding-top: calc(var(--button-gap) * 2 + var(--button-size));
         transition: all 0.5s;
         display: none;
         opacity: 0;
-        margin-left: calc(var(--button-gap) + var(--button-size));
-    }
-
-    nav#menuColor {
-        position: fixed;
-        top: calc(var(--button-gap) + var(--button-size));
-        gap: var(--button-gap);
-        padding: var(--button-gap);
-        transition: all 0.5s;
-        display: none;
-        opacity: 0;
-        width: 90vw;
+        width: 100%;
+        height: 100%;
+        box-sizing: border-box;
         grid-template-columns: repeat(auto-fill, var(--button-size));
-        max-height: calc(100vh - 130px);
-        background-color: rgba(255,255,255,0.5);
         overflow: scroll;
     }
 
@@ -197,7 +203,7 @@ const colors = [
     .btn-icon {
         display: flex;
         align-items: center;
-          justify-content: center;
+        justify-content: center;
     }
 
     #selectedColor img{

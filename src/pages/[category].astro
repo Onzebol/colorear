@@ -24,7 +24,7 @@ const keys = await Promise.all(
 		const url = new URL(import.meta.env.DEV ? svg : svg.replace("../","../src/"), import.meta.url)
 		const imageBuffer = fs.readFileSync(url) ;
 		const thumbnail =  await ImageThumbnail(imageBuffer, options);
-		return { name: `${category}/${path.parse(svg).name}`, img: thumbnail };
+		return { name: `${import.meta.env.DEV ? category : ''}/${path.parse(svg).name}`, img: thumbnail };
 	})
 );
 

@@ -1,4 +1,10 @@
 ---
+export interface Props {
+  onlyBack: boolean;
+}
+
+const { onlyBack } = Astro.props as Props;
+
 // const colors = ["#B21F35", "#D82735", "#FF7435", "#FFA135", "#FFCB35", "#FFF735", "#00753A", "#009E47", "#16DD36", "#0052A5", "#0079E7", "#06A9FC", "#681E7E", "#753CB5", "#BD7AF6", "#000000", "#595959", "#A9A9A9", "#DDDDDD", "#FFFFFF"]
 const colors = [
     "#000000", "#323132", "#b1b1b1", "#FFFFFF", // 1
@@ -47,20 +53,23 @@ const colors = [
 </nav>
 
 <nav id="menu">
-    <a class="btn btn-icon" href="/colorear/">
+    <button class="btn btn-icon" onclick="history.back()">
         <img src="/colorear/left.svg" />
-    </a>
-    <button id="reset" class="btn btn-icon">
-        <img src="/colorear/fit.svg" />
     </button>
-    <button id="selectedTool" data-menu="menuTool" class="btn btn-icon">
-        <img src="/colorear/crayon.svg" />
-    </button>
-    <button id="selectedColor" data-menu="menuColor" class="btn ">
-        <div class="color btn-icon" style="background-color: #FFFFFF;">
-            <img src="/colorear/palette-color.svg" />
-        </div>
-    </button>
+    {!onlyBack &&
+        <button id="reset" class="btn btn-icon">
+            <img src="/colorear/fit.svg" />
+        </button>
+        <button id="selectedTool" data-menu="menuTool" class="btn btn-icon">
+            <img src="/colorear/crayon.svg" />
+        </button>
+        <button id="selectedColor" data-menu="menuColor" class="btn ">
+            <div class="color btn-icon" style="background-color: #FFFFFF;">
+                <img src="/colorear/palette-color.svg" />
+            </div>
+        </button>
+    }
+    
 </nav>
 
 <script is:inline>
@@ -138,12 +147,8 @@ const colors = [
 
 </script>
 
+
 <style>
-    :root {
-        --button-size: 65px;
-        --button-gap: 16px;
-        --speed-menu: 0.3s
-    }
 
     #fondo {
         background-color: rgba(255,255,255,0.2);

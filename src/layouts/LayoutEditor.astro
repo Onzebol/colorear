@@ -47,7 +47,11 @@ const { title, onlyBackMenu } = Astro.props;
 				const detailEnd = event.detail;
 				if ((detail.x - detailEnd.x).between(-maxMovement, maxMovement) && (detail.y - detailEnd.y).between(-maxMovement, maxMovement) && detail.scale === detailEnd.scale) {
 					const path = event.detail.originalEvent.path[0];
-					if (path.className.baseVal === "st0") {
+					if (selectedTool.children[0].src.includes("zoom+")) {
+						panzoom.zoomIn();
+					} else if (selectedTool.children[0].src.includes("zoom-")) {
+						panzoom.zoomOut();
+					} else if (path.className.baseVal === "st0") {
 						if (selectedTool.children[0].src.includes("crayon")) {
 							path.style.fill = selectedColor.style.backgroundColor;
 						} else if (selectedTool.children[0].src.includes("color-dropper")) {

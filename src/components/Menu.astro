@@ -50,6 +50,15 @@ const colors = [
     <button class="btn btn-icon">
         <img src="/colorear/color-dropper.svg" />
     </button>
+    <button class="btn btn-icon">
+        <img src="/colorear/zoom+.svg" />
+    </button>
+    <button class="btn btn-icon">
+        <img src="/colorear/zoom-.svg" />
+    </button>
+    <button class="btn btn-icon">
+        <img src="/colorear/eraser.svg" />
+    </button>
 </nav>
 
 <nav id="menu">
@@ -135,7 +144,11 @@ const colors = [
     const btnTools = document.querySelectorAll('#menuTool button');
     btnTools.forEach((btn) => {
         btn.addEventListener('click', event => {
-            selectedTool.children[0].src = btn.children[0].src;
+            if (btn.children[0].src.includes("eraser")) {
+                document.querySelectorAll("path.st0").forEach(path => path.style.fill = "#FFFFFF");
+            } else {
+                selectedTool.children[0].src = btn.children[0].src;
+            }
             toggleMenu(btn.parentElement.id)
         });
     });

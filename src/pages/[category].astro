@@ -1,0 +1,37 @@
+---
+import Layout from '../layouts/Layout.astro';
+import fs from 'fs';
+import path from 'path';
+import ImageThumbnail from 'image-thumbnail';
+import Dibujo from '../components/Dibujo.astro';
+
+export function getStaticPaths() {
+    const svgs = import.meta.glob('/src/svg/**/*.jpg');
+    return Object.keys(svgs).map((svg) => {
+        return {
+            params: { category: path.parse(svg).name }
+        };
+    });
+}
+
+const { category } = Astro.params;
+const svgs = import.meta.glob('../svg/**/*.svg');
+const keysSvgs = Object.keys(svgs);
+const keysCategory = keysSvgs.filter(svg => svg.includes(`/${category}/`));
+let options = { width: 200, responseType: 'base64' }
+const keys = await Promise.all(
+	keysCategory.map(async (svg) => {
+		const url = new URL(import.meta.env.DEV ? svg : svg.replace("../","../src/"), import.meta.url)
+		const imageBuffer = fs.readFileSync(url) ;
+		const thumbnail =  await ImageThumbnail(imageBuffer, options);
+		return { name: `${import.meta.env.DEV ? category + '/' : ''}${path.parse(svg).name}`, img: thumbnail };
+	})
+);
+
+---
+
+<Layout title="Selecciona un dibujo para colorear" onlyBackMenu={ true } >
+	{keys.map(({name, img}) => 
+		<Dibujo name={name} img={img} />
+	)}
+</Layout>

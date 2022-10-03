@@ -3,10 +3,8 @@ import Menu from '../components/Menu.astro';
 
 export interface Props {
 	title: string;
-	onlyBackMenu: boolean;
 }
-const { title, onlyBackMenu } = Astro.props;
-const marginTopContainer = onlyBackMenu ? 'calc(var(--button-gap) + var(--button-size))' : '0px';
+const { title } = Astro.props as Props;
 ---
 
 <!DOCTYPE html>
@@ -20,13 +18,7 @@ const marginTopContainer = onlyBackMenu ? 'calc(var(--button-gap) + var(--button
 		<title>{title}</title>
 	</head>
 	<body>
-		{ onlyBackMenu && 
-			<Menu  onlyBack={onlyBackMenu} />		
-		}
-		<div id="container">
-			<slot />
-		</div>
-		
+		<slot />
 	</body>
 </html>
 
@@ -38,18 +30,12 @@ const marginTopContainer = onlyBackMenu ? 'calc(var(--button-gap) + var(--button
     }
 </style>
 
-<style define:vars={{ marginTopContainer }}>
+<style>
 	body {
 		margin: 0;
-		background-color: #ccc; 
-	}
-
-	#container { 
-		display: grid;
-    	gap: var(--button-gap);
-    	grid-auto-rows: 9rem;
-		grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
-		padding: 1rem;
-		margin-top: var(--marginTopContainer);
+		background-color: #ccc;
+		height: 100vh;
+		width: 100vw;
+		overflow: scroll;
 	}
 </style>

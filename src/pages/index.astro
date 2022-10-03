@@ -17,8 +17,19 @@ const keys = await Promise.all(
 );
 ---
 
-<Layout title="Selecciona un dibujo para colorear" onlyBackMenu={ false } >
-	{keys.map(({name, img}) => 
-		<Dibujo name={name} img={img} />
-	)}
+<Layout title="Selecciona un dibujo para colorear">
+	<div id="container">
+		{keys.map(({name, img}) => 
+			<Dibujo name={name} img={img} />
+		)}
+	</div>
+	<style>
+		#container { 
+			display: grid;
+			gap: var(--button-gap);
+			grid-auto-rows: 9rem;
+			grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+			padding: 1rem;
+		}
+	</style>
 </Layout>

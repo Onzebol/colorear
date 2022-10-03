@@ -4,6 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import ImageThumbnail from 'image-thumbnail';
 import Dibujo from '../components/Dibujo.astro';
+import Menu from '../components/Menu.astro';
 
 export function getStaticPaths() {
     const svgs = import.meta.glob('/src/svg/**/*.jpg');
@@ -31,7 +32,20 @@ const keys = await Promise.all(
 ---
 
 <Layout title="Selecciona un dibujo para colorear" onlyBackMenu={ true } >
-	{keys.map(({name, img}) => 
-		<Dibujo name={name} img={img} />
-	)}
+    <Menu onlyBack={ true } />
+	<div id="container">
+		{keys.map(({name, img}) => 
+			<Dibujo name={name} img={img} />
+		)}
+	</div>
+	<style>
+		#container { 
+			display: grid;
+			gap: var(--button-gap);
+			grid-auto-rows: 9rem;
+			grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+			padding: 1rem;
+			margin-top: calc(var(--button-gap) + var(--button-size));
+		}
+	</style>
 </Layout>

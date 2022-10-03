@@ -1,8 +1,9 @@
 ---
-import LayoutEditor from '../../layouts/LayoutEditor.astro';
+import Layout from '../../layouts/Layout.astro';
 
 import path from 'path';
 import Editor from '../../components/Editor.astro';
+import Menu from '../../components/Menu.astro';
 export function getStaticPaths() {
     const svgs = import.meta.glob('/src/svg/**/*.svg');
     return Object.keys(svgs).map((svg) => {
@@ -14,6 +15,7 @@ export function getStaticPaths() {
 const { id, category } = Astro.params;
 const name = id.replace("-", " ").replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase());
 ---
-<LayoutEditor title={`Colorear ${ name }`}>
+<Layout title={`Colorear ${ name }`}>
     <Editor svg={ id } category={ category } style=" height:100%; width:100%;" />
-</LayoutEditor>
+    <Menu onlyBack={ false } />
+</Layout>

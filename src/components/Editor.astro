@@ -7,5 +7,71 @@ export interface Props {
 const { svg, category } = Astro.props as Props;
 const { default: innerHTML } = await import(`../svg/${category}/${svg}.svg?raw`);
 ---
+<div id='scene'>
+  <Fragment set:html={innerHTML} />
+</div>
+<script src="/colorear/panzoom.js" is:inline></script>
+		<script is:inline>
+			Number.prototype.between = function(a, b) {
+				var min = Math.min.apply(Math, [a, b]),
+				max = Math.max.apply(Math, [a, b]);
+				return this > min && this < max;
+			};
+			const maxMovement = 5;
+			
+			let detail = {x: 0, y:0, scale:1};
+			const elem = document.querySelector('#scene');
+			const panzoom = Panzoom(elem, {
+				maxScale: 10,
+				cursor: "default",
+				animate: true
+			})
+			elem.addEventListener('wheel', panzoom.zoomWithWheel)
+			elem.addEventListener('panzoomstart', (event) => {
+				detail = event.detail;
+			})
 
-<Fragment set:html={innerHTML} />
+			elem.addEventListener('panzoomend', (event) => {
+				const detailEnd = event.detail;
+				if ((detail.x - detailEnd.x).between(-maxMovement, maxMovement) && (detail.y - detailEnd.y).between(-maxMovement, maxMovement) && detail.scale === detailEnd.scale) {
+					const path = event.detail.originalEvent.path[0];
+					if (selectedTool.children[0].src.includes("zoom+")) {
+						panzoom.zoomIn();
+					} else if (selectedTool.children[0].src.includes("zoom-")) {
+						panzoom.zoomOut();
+					} else if (path.className.baseVal === "st0") {
+						if (selectedTool.children[0].src.includes("crayon")) {
+							path.style.fill = selectedColor.style.backgroundColor;
+						} else if (selectedTool.children[0].src.includes("color-dropper")) {
+							selectedColor.style.backgroundColor = path.style.fill;
+						}
+					}
+				}
+			})
+			
+			window.addEventListener("orientationchange", (event) => {
+				panzoom.reset();
+			});
+
+		</script>
+
+<style>
+  #scene{
+    height: 100vh;
+    width: 100vw;
+    padding: 3rem;
+    box-sizing: border-box;
+  }
+
+  
+</style>
+<style is:inline>
+  svg {
+    height: 100%;
+    width: 100%;
+  }
+  #container {
+    height: 100%;
+    padding: 0;
+  }
+</style>

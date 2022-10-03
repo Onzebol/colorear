@@ -33,33 +33,36 @@ const colors = [
     "#687300", "#c7d000", "#dae14f", "#edeea7", // 24
 ];
 ---
-<div id="fondo"></div>
 
-<nav id="menuColor" class="menu">
-    {colors.map((color, index) => (
-        <button class="btn btnColor">
-            <div class="color" style={`background-color: ${color};`}></div>
+{!onlyBack &&
+    <div id="fondo"></div>
+
+    <nav id="menuColor" class="menu">
+        {colors.map((color, index) => (
+            <button class="btn btnColor">
+                <div class="color" style={`background-color: ${color};`}></div>
+            </button>
+        ))}
+    </nav>
+
+    <nav id="menuTool" class="menu">
+        <button class="btn btn-icon">
+            <img src="/colorear/crayon.svg" />
         </button>
-    ))}
-</nav>
-
-<nav id="menuTool" class="menu">
-    <button class="btn btn-icon">
-        <img src="/colorear/crayon.svg" />
-    </button>
-    <button class="btn btn-icon">
-        <img src="/colorear/color-dropper.svg" />
-    </button>
-    <button class="btn btn-icon">
-        <img src="/colorear/zoom+.svg" />
-    </button>
-    <button class="btn btn-icon">
-        <img src="/colorear/zoom-.svg" />
-    </button>
-    <button class="btn btn-icon">
-        <img src="/colorear/eraser.svg" />
-    </button>
-</nav>
+        <button class="btn btn-icon">
+            <img src="/colorear/color-dropper.svg" />
+        </button>
+        <button class="btn btn-icon">
+            <img src="/colorear/zoom+.svg" />
+        </button>
+        <button class="btn btn-icon">
+            <img src="/colorear/zoom-.svg" />
+        </button>
+        <button class="btn btn-icon">
+            <img src="/colorear/eraser.svg" />
+        </button>
+    </nav>
+}
 
 <nav id="menu">
     <button class="btn btn-icon" onclick="history.back()">
@@ -80,87 +83,92 @@ const colors = [
     }
 </nav>
 
-<script is:inline>
+{!onlyBack &&
+    <script is:inline>
+        const speedMenuHide = 500;
 
-    fondo.addEventListener('wheel', function(e) {
-        e.preventDefault();
-    });
+        fondo.addEventListener('wheel', function(e) {
+            e.preventDefault();
+        });
 
-    function toggleMenu(name) {
-        const menus = document.querySelectorAll('.menu');
-        menus.forEach((menu) => {
-            if (name) {
-                if (menu.id === name) {
-                    if (menu.style.opacity === "1") {
-                        menu.style.opacity = "0";
-                        fondo.style.opacity = "0";
-                        setTimeout(function(){
-                            menu.style.display = "none";
-                            fondo.style.display = "none";
-                        }, 500);
+        function toggleMenu(name) {
+            const menus = document.querySelectorAll('.menu');
+            menus.forEach((menu) => {
+                if (name) {
+                    if (menu.id === name) {
+                        if (menu.style.opacity === "1") {
+                            menu.style.opacity = "0";
+                            fondo.style.opacity = "0";
+                            setTimeout(function(){
+                                menu.style.display = "none";
+                                fondo.style.display = "none";
+                            }, speedMenuHide);
+                        } else {
+                            menu.style.display = "grid";
+                            fondo.style.display = "block";
+                            setTimeout(function(){
+                                menu.style.opacity = "1";
+                                fondo.style.opacity = "1";
+                            }, 0);
+                        }
                     } else {
-                        menu.style.display = "grid";
-                        fondo.style.display = "block";
-                        setTimeout(function(){
-                            menu.style.opacity = "1";
-                            fondo.style.opacity = "1";
-                        }, 100);
+                        if (menu.style.opacity === "1") {
+                            menu.style.opacity = "0";
+                            setTimeout(function(){
+                                menu.style.display = "none";
+                            }, speedMenuHide);
+                        }
                     }
                 } else {
-                    if (menu.style.opacity === "1") {
-                        menu.style.opacity = "0";
-                        setTimeout(function(){
-                            menu.style.display = "none";
-                        }, 500);
-                    }
+                    menus.forEach(menu => menu.style.opacity = "0");
+                    fondo.style.opacity = "0";
+                    setTimeout(function(){
+                        menus.forEach(menu => menu.style.display = "none");
+                        fondo.style.display = "none";
+                    }, speedMenuHide);
                 }
-            } else {
-                menus.forEach(menu => menu.style.opacity = "0");
-                fondo.style.opacity = "0";
-                setTimeout(function(){
-                    menus.forEach(menu => menu.style.display = "none");
-                    fondo.style.display = "none";
-                }, 500);
-            }
+            });
+        }
+
+        const buttonsMenu = document.querySelectorAll('#menu button');
+        buttonsMenu.forEach((btn) => {
+            btn.addEventListener('click', event => {
+                toggleMenu(btn.dataset.menu);
+            });
         });
-    }
 
-    const buttonsMenu = document.querySelectorAll('#menu button');
-    buttonsMenu.forEach((btn) => {
-        btn.addEventListener('click', event => {
-            toggleMenu(btn.dataset.menu);
+        const btnColors = document.querySelectorAll('#menuColor button');
+        btnColors.forEach((btn) => {
+            btn.addEventListener('click', event => {
+                selectedColor.style.backgroundColor = btn.children[0].style.backgroundColor;
+                toggleMenu(btn.parentElement.id)
+            });
         });
-    });
 
-    const btnColors = document.querySelectorAll('#menuColor button');
-    btnColors.forEach((btn) => {
-        btn.addEventListener('click', event => {
-            selectedColor.style.backgroundColor = btn.children[0].style.backgroundColor;
-            toggleMenu(btn.parentElement.id)
+        const btnTools = document.querySelectorAll('#menuTool button');
+        btnTools.forEach((btn) => {
+            btn.addEventListener('click', event => {
+                if (btn.children[0].src.includes("eraser")) {
+                    document.querySelectorAll("path.st0").forEach(path => path.style.fill = "#FFFFFF");
+                } else {
+                    selectedTool.children[0].src = btn.children[0].src;
+                }
+                toggleMenu(btn.parentElement.id)
+            });
         });
-    });
 
-    const btnTools = document.querySelectorAll('#menuTool button');
-    btnTools.forEach((btn) => {
-        btn.addEventListener('click', event => {
-            if (btn.children[0].src.includes("eraser")) {
-                document.querySelectorAll("path.st0").forEach(path => path.style.fill = "#FFFFFF");
-            } else {
-                selectedTool.children[0].src = btn.children[0].src;
-            }
-            toggleMenu(btn.parentElement.id)
+        const resetButton = document.querySelector('#reset');
+        resetButton.addEventListener('click', (event) => {
+            panzoom.reset();
         });
-    });
 
-    const resetButton = document.querySelector('#reset');
-    resetButton.addEventListener('click', (event) => {
-        panzoom.reset();
-    });
-
-</script>
-
+    </script>
+}
 
 <style>
+	:root {
+        --speed-menu: 0.5s;
+    }
 
     #fondo {
         background-color: rgba(255,255,255,0.2);

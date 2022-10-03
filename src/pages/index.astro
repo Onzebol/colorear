@@ -6,7 +6,7 @@ import ImageThumbnail from 'image-thumbnail';
 import Dibujo from '../components/Dibujo.astro';
 
 const svgs = import.meta.glob('../svg/**/*.jpg');
-let options = { width: 200, responseType: 'base64' }
+const options = { width: 200, responseType: 'base64' }
 const keys = await Promise.all(
 	Object.keys(svgs).map(async (svg) => {
 		const url = new URL(import.meta.env.DEV ? svg : svg.replace("../","../src/"), import.meta.url)

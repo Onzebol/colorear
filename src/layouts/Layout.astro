@@ -11,11 +11,34 @@ const { title } = Astro.props as Props;
 <html lang="es">
 	<head>
 		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/colorear/favicon.svg" />
-		<link rel="manifest" href="/colorear/js13kpwa.webmanifest" />
+		<link rel="icon" type="image/svg+xml" href="/colorear/icons/icon-32.png" />
+		<link rel="manifest" href="/colorear/manifest.webmanifest" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1" />
 		<meta name="generator" content={Astro.generator} />
+		<link rel="icon" sizes="192x192" href="/colorear/icons/icon-192.png" />
+		<link rel="apple-touch-icon" href="/colorear/icons/icon-96.png" />
+		<meta name="msapplication-square310x310logo" content="/colorear/icons/icon-96.png" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+		<link rel="apple-touch-startup-image" href="/colorear/icons/icon-192.png" />
 		<title>{title}</title>
+		<script>
+			if ("serviceWorker" in navigator) {
+			  navigator.serviceWorker
+				.register("/colorear/sw.js")
+				.then(function (registration) {
+				  // Registration was successful
+				  console.log(
+					"ServiceWorker registration successful with scope: ",
+					registration.scope
+				  );
+				})
+				.catch(function (err) {
+				  // registration failed :(
+				  console.log("ServiceWorker registration failed: ", err);
+				});
+			}
+			
+		  </script>
 	</head>
 	<body>
 		<slot />

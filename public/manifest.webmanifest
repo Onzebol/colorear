@@ -2,8 +2,7 @@
     "theme_color": "#ccc",
     "background_color": "#ccc",
     "display": "standalone",
-    "scope": "/",
-    "start_url": "/colorear/",
+    "start_url": "/colorear/index.html",
     "name": "Colorear dibujos",
     "short_name": "Colorear",
     "description": "Aplicaci\u00f3n para colorear dibujos",
@@ -14,8 +13,23 @@
             "type": "image/png"
         },
         {
+            "src": "icons/icon-64.png",
+            "sizes": "64x64",
+            "type": "image/png"
+        },
+        {
             "src": "icons/icon-96.png",
             "sizes": "96x96",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/icon-128.png",
+            "sizes": "128x128",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/icon-168.png",
+            "sizes": "168x168",
             "type": "image/png"
         },
         {

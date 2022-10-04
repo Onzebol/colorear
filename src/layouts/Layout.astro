@@ -21,7 +21,7 @@ const { title } = Astro.props as Props;
 		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 		<link rel="apple-touch-startup-image" href="/colorear/icons/icon-192.png" />
 		<title>{title}</title>
-		<script>
+		<script is:inline>
 			if ("serviceWorker" in navigator) {
 			  navigator.serviceWorker
 				.register("/colorear/sw.js")
@@ -36,8 +36,7 @@ const { title } = Astro.props as Props;
 				  // registration failed :(
 				  console.log("ServiceWorker registration failed: ", err);
 				});
-			}
-			
+			}		
 		  </script>
 	</head>
 	<body>

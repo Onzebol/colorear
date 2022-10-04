@@ -47,37 +47,37 @@ const colors = [
 
     <nav id="menuTool" class="menu">
         <button class="btn btn-icon">
-            <img src="/colorear/crayon.svg" />
+            <img src="/colorear/buttons/crayon.svg" />
         </button>
         <button class="btn btn-icon">
-            <img src="/colorear/color-dropper.svg" />
+            <img src="/colorear/buttons/color-dropper.svg" />
         </button>
         <button class="btn btn-icon">
-            <img src="/colorear/zoom+.svg" />
+            <img src="/colorear/buttons/zoom+.svg" />
         </button>
         <button class="btn btn-icon">
-            <img src="/colorear/zoom-.svg" />
+            <img src="/colorear/buttons/zoom-.svg" />
         </button>
         <button class="btn btn-icon">
-            <img src="/colorear/eraser.svg" />
+            <img src="/colorear/buttons/eraser.svg" />
         </button>
     </nav>
 }
 
 <nav id="menu">
     <button class="btn btn-icon" onclick="history.back()">
-        <img src="/colorear/left.svg" />
+        <img src="/colorear/buttons/left.svg" />
     </button>
     {!onlyBack &&
         <button id="reset" class="btn btn-icon">
-            <img src="/colorear/fit.svg" />
+            <img src="/colorear/buttons/fit.svg" />
         </button>
         <button id="selectedTool" data-menu="menuTool" class="btn btn-icon">
-            <img src="/colorear/crayon.svg" />
+            <img src="/colorear/buttons/crayon.svg" />
         </button>
         <button id="selectedColor" data-menu="menuColor" class="btn ">
             <div class="color btn-icon" style="background-color: #FFFFFF;">
-                <img src="/colorear/palette-color.svg" />
+                <img src="/colorear/buttons/palette-color.svg" />
             </div>
         </button>
     }

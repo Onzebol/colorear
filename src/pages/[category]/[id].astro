@@ -13,9 +13,9 @@ export function getStaticPaths() {
     });
 }
 const { id, category } = Astro.params;
-const name = id.replace("-", " ").replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase());
+const name = id.toString().replace("-", " ").replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase());
 ---
 <Layout title={`Colorear ${ name }`}>
-    <Editor svg={ id } category={ category } style=" height:100%; width:100%;" />
+    <Editor svg={ id.toString() } category={ category.toString() } />
     <Menu onlyBack={ false } />
 </Layout>

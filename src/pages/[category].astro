@@ -31,7 +31,7 @@ const keys = await Promise.all(
 
 ---
 
-<Layout title="Selecciona un dibujo para colorear" onlyBackMenu={ true } >
+<Layout title={`${category.toString().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase())} - Selecciona un dibujo para colorear`} >
     <Menu onlyBack={ true } />
 	<div id="container">
 		{keys.map(({name, img}) => 

@@ -17,7 +17,7 @@ const keys = await Promise.all(
 );
 ---
 
-<Layout title="Selecciona un dibujo para colorear">
+<Layout title="Selecciona una categoría">
 	<div id="container">
 		{keys.map(({name, img}) => 
 			<Dibujo name={name} img={img} />

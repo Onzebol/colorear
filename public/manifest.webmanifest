@@ -1,5 +1,5 @@
 {
-    "theme_color": "#ccc",
+    "theme_color": "#000",
     "background_color": "#ccc",
     "display": "standalone",
     "start_url": "/colorear/index.html",

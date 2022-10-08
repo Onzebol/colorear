@@ -33,55 +33,60 @@ const colors = [
     "#687300", "#c7d000", "#dae14f", "#edeea7", // 24
 ];
 ---
-
-{!onlyBack &&
-    <div id="fondo"></div>
-
-    <nav id="menuColor" class="menu">
-        {colors.map((color, index) => (
-            <button class="btn btnColor">
-                <div class="color" style={`background-color: ${color};`}></div>
-            </button>
-        ))}
-    </nav>
-
-    <nav id="menuTool" class="menu">
-        <button class="btn btn-icon">
-            <img src="/colorear/buttons/crayon.svg" />
-        </button>
-        <button class="btn btn-icon">
-            <img src="/colorear/buttons/color-dropper.svg" />
-        </button>
-        <button class="btn btn-icon">
-            <img src="/colorear/buttons/zoom+.svg" />
-        </button>
-        <button class="btn btn-icon">
-            <img src="/colorear/buttons/zoom-.svg" />
-        </button>
-        <button class="btn btn-icon">
-            <img src="/colorear/buttons/eraser.svg" />
-        </button>
-    </nav>
-}
-
-<nav id="menu">
-    <button class="btn btn-icon" onclick="history.back()">
-        <img src="/colorear/buttons/left.svg" />
-    </button>
+<div class="menuBotones">
     {!onlyBack &&
-        <button id="reset" class="btn btn-icon">
-            <img src="/colorear/buttons/fit.svg" />
-        </button>
-        <button id="selectedTool" data-menu="menuTool" class="btn btn-icon">
-            <img src="/colorear/buttons/crayon.svg" />
-        </button>
-        <button id="selectedColor" data-menu="menuColor" class="btn ">
-            <div class="color btn-icon" style="background-color: #FFFFFF;">
-                <img src="/colorear/buttons/palette-color.svg" />
-            </div>
-        </button>
+        <div id="fondo"></div>
+    
+        <nav id="menuColor" class="menu">
+            {colors.map((color, index) => (
+                <button class="btn btnColor">
+                    <div class="color" style={`background-color: ${color};`}></div>
+                </button>
+            ))}
+        </nav>
+    
+        <nav id="menuTool" class="menu">
+            <button class="btn btn-icon">
+                <img src="/colorear/buttons/crayon.svg" />
+            </button>
+            <button class="btn btn-icon">
+                <img src="/colorear/buttons/color-dropper.svg" />
+            </button>
+            <button class="btn btn-icon">
+                <img src="/colorear/buttons/zoom+.svg" />
+            </button>
+            <button class="btn btn-icon">
+                <img src="/colorear/buttons/zoom-.svg" />
+            </button>
+            <button class="btn btn-icon">
+                <img src="/colorear/buttons/eraser.svg" />
+            </button>
+            <button class="btn btn-icon" onclick="window.print();">
+                <img src="/colorear/buttons/printer.svg" />
+            </button>
+        </nav>
     }
-</nav>
+    
+    <nav id="menu">
+        <button class="btn btn-icon" onclick="history.back()">
+            <img src="/colorear/buttons/left.svg" />
+        </button>
+        {!onlyBack &&
+            <button id="reset" class="btn btn-icon">
+                <img src="/colorear/buttons/fit.svg" />
+            </button>
+            <button id="selectedTool" data-menu="menuTool" class="btn btn-icon">
+                <img src="/colorear/buttons/crayon.svg" />
+            </button>
+            <button id="selectedColor" data-menu="menuColor" class="btn ">
+                <div class="color btn-icon" style="background-color: #FFFFFF;">
+                    <img src="/colorear/buttons/palette-color.svg" />
+                </div>
+            </button>
+        }
+    </nav>
+</div>
+
 
 {!onlyBack &&
     <script is:inline>

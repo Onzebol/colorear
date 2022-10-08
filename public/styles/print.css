@@ -1,0 +1,25 @@
+@page {
+  margin: 0;
+}
+
+html {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+body {
+  background-color: white !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.menuBotones {
+  display: none !important;
+}
+
+#scene{
+  height: 297mm !important;
+  width: 210mm !important;
+  padding: 5mm !important;
+}

@@ -34,7 +34,7 @@ const { default: innerHTML } = await import(`../svg/${category}/${svg}.svg?raw`)
 			elem.addEventListener('panzoomend', (event) => {
 				const detailEnd = event.detail;
 				if ((detail.x - detailEnd.x).between(-maxMovement, maxMovement) && (detail.y - detailEnd.y).between(-maxMovement, maxMovement) && detail.scale === detailEnd.scale) {
-					const path = event.detail.originalEvent.path[0];
+					const path = event.detail.originalEvent.composedPath()[0];
 					if (selectedTool.children[0].src.includes("zoom+")) {
 						panzoom.zoomIn();
 					} else if (selectedTool.children[0].src.includes("zoom-")) {

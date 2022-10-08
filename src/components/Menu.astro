@@ -153,7 +153,7 @@ const colors = [
         const btnTools = document.querySelectorAll('#menuTool button');
         btnTools.forEach((btn) => {
             btn.addEventListener('click', event => {
-                if (btn.children[0].src.includes("eraser")) {
+                if (["eraser", "printer"].some(s => btn.children[0].src.includes(s))) {
                     document.querySelectorAll("path.st0").forEach(path => path.style.fill = "#FFFFFF");
                 } else {
                     selectedTool.children[0].src = btn.children[0].src;

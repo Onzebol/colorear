@@ -1,4 +1,4 @@
-const cacheName = "colorear-v1.3";
+const cacheName = "colorear-v1.4";
 const contentToCache = [
   "/colorear/",
   "/colorear/index.html",
@@ -20,8 +20,7 @@ const contentToCache = [
   "/colorear/buttons/palette.svg",
   "/colorear/buttons/printer.svg",
   "/colorear/buttons/zoom-.svg",
-  "/colorear/buttons/zoom+.svg",
-  "/colorear/momonster/*",
+  "/colorear/buttons/zoom+.svg"
 ];
 
 // Installing Service Worker

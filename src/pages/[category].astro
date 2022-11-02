@@ -28,11 +28,12 @@ const keys = await Promise.all(
 		return { name: `${import.meta.env.DEV ? category + '/' : ''}${path.parse(svg).name}`, img: thumbnail };
 	})
 );
-
+const categoryUppercase = category.toString().replace("-"," ").replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase());
+const title = `${categoryUppercase} - Selecciona un dibujo para colorear`;
 ---
 
-<Layout title={`${category.toString().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase())} - Selecciona un dibujo para colorear`} >
-    <Menu onlyBack={ true } />
+<Layout title={title} >
+    <Menu onlyBack={true} viewTitle={true} title={title} />
 	<div id="container">
 		{keys.map(({name, img}) => 
 			<Dibujo name={name} img={img} />

@@ -4,6 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import ImageThumbnail from 'image-thumbnail';
 import Dibujo from '../components/Dibujo.astro';
+import Menu from '../components/Menu.astro';
 
 const svgs = import.meta.glob('../svg/**/*.jpg');
 const options = { width: 200, responseType: 'base64' }
@@ -15,9 +16,11 @@ const keys = await Promise.all(
 		return { name: path.parse(svg).name, img: thumbnail };
 	})
 );
+const title = "Colorear - Selecciona una categoría";
 ---
 
-<Layout title="Selecciona una categoría">
+<Layout title={title}>
+    <Menu onlyTitle={true} viewTitle={true} title={title} />
 	<div id="container">
 		{keys.map(({name, img}) => 
 			<Dibujo name={name} img={img} />
@@ -30,6 +33,7 @@ const keys = await Promise.all(
 			grid-auto-rows: 9rem;
 			grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
 			padding: 1rem;
+			margin-top: calc(var(--button-gap) + var(--button-size));
 		}
 	</style>
 </Layout>

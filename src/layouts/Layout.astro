@@ -20,36 +20,32 @@ const { title } = Astro.props as Props;
 		<link rel="apple-touch-startup-image" href="/colorear/icons/icon-192.png" />
 		<title>{title}</title>
 		<link rel="stylesheet" media="print" href="/colorear/styles/print.css" />
-
-		<script is:inline>
-			if ("serviceWorker" in navigator) {
-			  navigator.serviceWorker
-				.register("/colorear/sw.js")
-				.then(function (registration) {
-				  // Registration was successful
-				  console.log(
-					"ServiceWorker registration successful with scope: ",
-					registration.scope
-				  );
-				})
-				.catch(function (err) {
-				  // registration failed :(
-				  console.log("ServiceWorker registration failed: ", err);
-				});
-			}		
-		  </script>
+		{!import.meta.env.DEV && 
+			<script is:inline>
+				if ("serviceWorker" in navigator) {
+				navigator.serviceWorker
+					.register("/colorear/sw.js")
+					.then(function (registration) {
+					// Registration was successful
+					console.log(
+						"ServiceWorker registration successful with scope: ",
+						registration.scope
+					);
+					})
+					.catch(function (err) {
+					// registration failed :(
+					console.log("ServiceWorker registration failed: ", err);
+					});
+				}		
+		  	</script>
+		}		
 	</head>
 	<body>
 		<slot />
 	</body>
 </html>
 
-<style is:global>
-	:root {
-        --button-size: 65px;
-        --button-gap: 16px;
-    }
-</style>
+
 
 <style>
 	body {
@@ -58,5 +54,6 @@ const { title } = Astro.props as Props;
 		height: 100%;
 		width: 100%;
 		overflow: auto;
+		font-family: 'Helvetica', 'Arial', sans-serif;
 	}
 </style>

@@ -1,9 +1,12 @@
 ---
 export interface Props {
-  onlyBack: boolean;
+  onlyBack?: boolean;
+  onlyTitle?: boolean;
+  viewTitle?: boolean;
+  title?: string;
 }
 
-const { onlyBack } = Astro.props as Props;
+const { onlyBack, onlyTitle, viewTitle, title } = Astro.props as Props;
 
 // const colors = ["#B21F35", "#D82735", "#FF7435", "#FFA135", "#FFCB35", "#FFF735", "#00753A", "#009E47", "#16DD36", "#0052A5", "#0079E7", "#06A9FC", "#681E7E", "#753CB5", "#BD7AF6", "#000000", "#595959", "#A9A9A9", "#DDDDDD", "#FFFFFF"]
 const colors = [
@@ -68,10 +71,15 @@ const colors = [
     }
     
     <nav id="menu">
-        <button class="btn btn-icon" onclick="history.back()">
-            <img src="/colorear/buttons/left.svg" />
-        </button>
-        {!onlyBack &&
+        {!onlyTitle &&
+            <button class="btn btn-icon" onclick="history.back()">
+                <img src="/colorear/buttons/left.svg" />
+            </button>
+        }
+        {viewTitle &&
+            <h1>{title}</h1>
+        }
+        {!onlyBack && !onlyTitle &&
             <button id="reset" class="btn btn-icon">
                 <img src="/colorear/buttons/fit.svg" />
             </button>
@@ -170,6 +178,13 @@ const colors = [
     </script>
 }
 
+<style is:global>
+	:root {
+        --button-size: 65px;
+        --button-gap: 16px;
+    }
+</style>
+
 <style>
 	:root {
         --speed-menu: 0.5s;
@@ -190,10 +205,26 @@ const colors = [
 
     nav#menu {
         display: flex;
+        align-items: center;
         position: fixed;
         top: 0;
         gap: var(--button-gap);
         padding: var(--button-gap);
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    nav#menu h1  {
+        line-height: var(--button-size);
+        margin: 0;
+        padding: 0 1rem;
+        border-radius: var(--button-gap);
+        background-color: white;
+        box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
+        box-sizing: border-box;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
     }
 
     .menu {
@@ -222,6 +253,7 @@ const colors = [
         width: var(--button-size);
         height: var(--button-size);
         box-sizing: border-box;
+        flex: 0 0 var(--button-size);
     }
 
     .color {

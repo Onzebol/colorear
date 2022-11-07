@@ -1,4 +1,4 @@
-const cacheName = "colorear-v1.7";
+const cacheName = "colorear-v1.8";
 const contentToCache = [
   "/colorear/",
   "/colorear/index.html",
